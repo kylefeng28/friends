@@ -5,8 +5,8 @@ See who's online on your \*NIX server! Perfect for campus servers.
 ## Installation
 - Place the `friends` script somewhere in your PATH.
 - Export the `MYFRIENDS` variable in your `.bashrc` or `.tcshrc` file
-  - Format is usernames separated by a pipe (|)
-  - Example: `export MYFRIENDS="alice|bob|charlie"
+  - Format is usernames separated by a pipe (`|`)
+  - Example: `export MYFRIENDS="alice|bob|charlie"`
 
 ## Commands
 ### List friends
