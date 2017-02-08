@@ -1,10 +1,38 @@
 #!/bin/bash
 
-function list {
-	# Get unique users and grep for friends
+# Get unique users and grep for friends
+function get_friends {
 	online=$(users | tr " " "\n" | uniq | grep -E $MYFRIENDS | tr "\n" " ");
-	# Get count
+}
+
+# Get number of friends
+function get_count {
 	count=$(echo $online | wc -w)
+}
+
+# Get full name of user
+# Note: this echoes and does not store the value
+# http://stackoverflow.com/a/833235/5191980
+function get_full_name {
+	getent passwd $1 | cut -d ':' -f 5
+}
+
+# Get last login and idle time of user
+# http://stackoverflow.com/a/5463499/5191980
+# TODO parameter for arbitrary user, check if online or not
+function get_last_login {
+	# Last login time
+	echo -n "On since "
+	last -R $1 | head -n 1 | tr -s " " | cut -d" " -f3,4,5,6
+	# Idle time
+	echo -n "Idle for "
+	w $1 | tr -s " " | cut -d" " -f5 | tail -n+3
+}
+
+# Lists how many friends are online and who they are
+function list {
+	get_friends
+	get_count
 	
 	if [ -n "$online" ]; then
 		if [ "$count" == 1 ]; then
@@ -19,4 +47,22 @@ function list {
 	fi
 }
 
-list
+# Shows what friends are up to
+# TODO parameter for arbitrary user
+function info {
+	get_friends
+	for friend in $online; do
+		echo "$friend:"
+		get_last_login $friend;
+		echo ""
+	done
+}
+
+# Parse command line arguments
+# Default: list
+key=${1:-"list"}
+case $key in
+	list)	list ;;
+	info)	info ;;
+	*)	echo "Unknown option" ;;
+esac
