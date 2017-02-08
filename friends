@@ -1,16 +1,22 @@
-# Get unique users and grep for friends
-online=$(users | tr " " "\n" | uniq | grep -E $MYFRIENDS | tr "\n" " ");
-# Get count
-count=$(echo $online | wc -w)
+#!/bin/bash
 
-if [ -n "$online" ]; then
-	if [ "$count" == 1 ]; then
-		echo "1 friend is online!";
+function list {
+	# Get unique users and grep for friends
+	online=$(users | tr " " "\n" | uniq | grep -E $MYFRIENDS | tr "\n" " ");
+	# Get count
+	count=$(echo $online | wc -w)
+	
+	if [ -n "$online" ]; then
+		if [ "$count" == 1 ]; then
+			echo "1 friend is online!";
+		else
+			echo "$count friends are online!";
+		fi
+	
+		echo $online;
 	else
-		echo "$count friends are online!";
+		echo "No friends are online :(";
 	fi
+}
 
-	echo $online;
-else
-	echo "No friends are online :(";
-fi
+list
